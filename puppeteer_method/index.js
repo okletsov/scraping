@@ -5,10 +5,15 @@ const puppeteer = require('puppeteer');
       headless: false
   });
   const page = await browser.newPage();
-  await page.goto('https://google.com');
-  await page.type('.gLFyf.gsfi', 'Udemy Tutorial', {delay: 100}); // Types slower, like a user
-  await page.keyboard.press('Enter');
-  await page.waitForNavigation();
-  await page.screenshot({path: 'example.png'});
-  await browser.close();
+  await page.goto('https://instagram.com');
+  await page.waitFor('a[href="/accounts/login/?source=auth_switcher"]');
+  await page.click('a[href="/accounts/login/?source=auth_switcher"]');
+  await page.waitFor(500);
+
+  await page.waitFor('input[name="username"]');
+  await page.type('input[name="username"]', 'myUsername');
+  await page.type('input[name="password"]', 'myPassword');
+  await page.click('button[type="submit"]');
+  
+  // await browser.close();
 })();
