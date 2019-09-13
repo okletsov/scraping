@@ -10,8 +10,9 @@ const twitter = require('./twitter');
 
     await twitter.initialize();
     await twitter.login(USERNAME, PASSWORD);
+    await twitter.postTweet('just a test');
 
-    debugger;
+    debugger; 
   
   // await browser.close();
 })();

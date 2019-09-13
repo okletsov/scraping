@@ -13,6 +13,11 @@ const twitter = {
         });
         
         page = await browser.newPage();
+        await page.setViewport({
+            width: 1024,
+            height: 768,
+            deviceScaleFactor: 1,
+          });
         await page.goto(BASE_URL);
     },
 
@@ -23,6 +28,15 @@ const twitter = {
         await page.type('.js-username-field', username);
         await page.type('.js-password-field', password);
         await page.click('button[type="submit"]');
+        await page.waitFor('.DraftEditor-editorContainer');
+    },
+
+    postTweet: async (message) => {
+        await page.waitFor('.DraftEditor-editorContainer');
+        await page.click('.DraftEditor-editorContainer');
+        await page.waitFor('.public-DraftEditorPlaceholder-hasFocus');
+        await page.keyboard.type(message);
+        await page.click('[data-testid="tweetButtonInline"]');
     },
 
     end: async () => {
