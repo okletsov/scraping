@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 
 const BASE_URL = 'https://twitter.com';
 const LOGIN_URL = 'https://twitter.com/login';
+const USERNAME_URL = (username) => `https://twitter.com/${username}`;
 
 let browser = null;
 let page = null;
@@ -37,6 +38,23 @@ const twitter = {
         await page.waitFor('.public-DraftEditorPlaceholder-hasFocus');
         await page.keyboard.type(message);
         await page.click('[data-testid="tweetButtonInline"]');
+    },
+
+    getUser: async (username) => {
+        await page.waitFor('.DraftEditor-editorContainer');
+        await page.goto(USERNAME_URL(username));
+        await page.waitFor('h2[aria-level="2"][dir="auto"]');
+        await page.waitFor('[data-testid="UserDescription"]');
+
+        let details = await page.evaluate(() => {
+            return {
+                fullName: document.querySelector('h2[aria-level="2"][dir="auto"]').innerText,
+                description: document.querySelector('[data-testid="UserDescription"]').innerText,
+                followers: document.querySelector(`[href="/udemy/followers"]`).getAttribute("title")
+            }
+        });
+
+        return details;
     },
 
     end: async () => {
